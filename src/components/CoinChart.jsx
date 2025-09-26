@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import { Line } from "react-chartjs-2";
 import { Chart as ChartJS, CategoryScale, LinearScale, PointElement, LineElement, Tooltip, Legend, TimeScale } from "chart.js";
 import 'chartjs-adapter-date-fns';
+import { currencySymbols } from "../utils/CurrencyUtils";
 
 ChartJS.register(
     CategoryScale,
@@ -15,13 +16,13 @@ ChartJS.register(
 
 const API_URL = import.meta.env.VITE_COIN_API_URL;
 
-const CoinChart = ({coinId}) => {
+const CoinChart = ({coinId, currency}) => {
     const [chartData, setChartData] = useState(null);
     const [loading, setLoading] = useState(true);
 
     useEffect(() => {
         const fetchPrices = async () => {
-            const res = await fetch(`${API_URL}/${coinId}/market_chart?vs_currency=usd&days=7`);
+            const res = await fetch(`${API_URL}/${coinId}/market_chart?vs_currency=${currency}&days=7`);
 
             const data = await res.json();
 
@@ -33,7 +34,7 @@ const CoinChart = ({coinId}) => {
             setChartData({
                 datasets: [
                     {
-                        label: 'Price (USD)',
+                        label: 'Price',
                         data: prices,
                         fill: true,
                         borderColor: '#007bff',
@@ -48,7 +49,7 @@ const CoinChart = ({coinId}) => {
         }
 
         fetchPrices();
-    }, [coinId]);
+    }, [coinId, currency]);
 
     if (loading) return <p>Loading...</p>
 
@@ -75,7 +76,7 @@ const CoinChart = ({coinId}) => {
                         },
                         y: {
                             ticks: {
-                                callback: (value) => `$${value.toLocaleString()}`
+                                callback: (value) => `${currencySymbols[currency]}${value.toLocaleString()}`
                             }
                         }
                     }

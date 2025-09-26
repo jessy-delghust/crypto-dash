@@ -195,8 +195,8 @@ a {
   text-align: center;
   padding: 20px;
   font-family: Arial, sans-serif;
-  color: #333;
-  background-color: #f9f9f9;
+  color: var(--color-text);
+  background-color: var(--color-bg-element);
   border-radius: 8px;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 }
@@ -227,13 +227,13 @@ a {
 .coin-details-description {
   font-size: 16px;
   margin-bottom: 20px;
-  color: #555;
+  color: var(--color-text);
 }
 
 .coin-details-info h3,
 .coin-details-info h4 {
   margin: 10px 0;
-  color: #222;
+  color: var(--color-text);
 }
 
 .coin-details-info h3 {

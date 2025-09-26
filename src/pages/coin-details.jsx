@@ -2,9 +2,11 @@ import { useState, useEffect } from "react";
 import { useParams, Link } from "react-router";
 import Spinner from "../components/Spinner";
 import CoinChart from "../components/CoinChart";
+import { formatPrice } from "../utils/CurrencyUtils";
+
 const API_URL = import.meta.env.VITE_COIN_API_URL;
 
-const CoinDetailsPage = () => {
+const CoinDetailsPage = ({ currency }) => {
     const { id } = useParams();
     const [coin, setCoin] = useState(null);
     const [loading, setLoading] = useState(true);
@@ -49,12 +51,12 @@ const CoinDetailsPage = () => {
 
                 <div className='coin-details-info'>
                     <h3>Rank: #{coin.market_cap_rank}</h3>
-                    <h3>Current Price: ${coin.market_data.current_price.usd.toLocaleString()}</h3>
-                    <h4>Market Cap: ${coin.market_data.market_cap.usd.toLocaleString()}</h4>
-                    <h4>24h High: ${coin.market_data.high_24h.usd.toLocaleString()}</h4>
-                    <h4>24h Low: ${coin.market_data.low_24h.usd.toLocaleString()}</h4>
+                    <h3>Current Price: {formatPrice(coin.market_data.current_price[currency], currency)}</h3>
+                    <h4>Market Cap: {formatPrice(coin.market_data.market_cap[currency], currency)}</h4>
+                    <h4>24h High: {formatPrice(coin.market_data.high_24h[currency], currency)}</h4>
+                    <h4>24h Low: {formatPrice(coin.market_data.low_24h[currency], currency)}</h4>
                     <h4>
-                        24h Price Change: ${coin.market_data.price_change_24h.toFixed(2)} (
+                        24h Price Change: {formatPrice(coin.market_data.price_change_24h, currency)} (
                         {coin.market_data.price_change_percentage_24h.toFixed(2)}%)
                     </h4>
                     <h4>
@@ -65,17 +67,17 @@ const CoinDetailsPage = () => {
                     </h4>
                     <h4>Max Supply: {coin.market_data.max_supply?.toLocaleString() || 'N/A'}</h4>
                     <h4>
-                        All-Time High: ${coin.market_data.ath.usd.toLocaleString()} on{' '}
-                        {new Date(coin.market_data.ath_date.usd).toLocaleDateString()}
+                        All-Time High: {formatPrice(coin.market_data.ath[currency], currency)} on{' '}
+                        {new Date(coin.market_data.ath_date[currency]).toLocaleDateString()}
                     </h4>
                     <h4>
-                        All-Time Low: ${coin.market_data.atl.usd.toLocaleString()} on{' '}
-                        {new Date(coin.market_data.atl_date.usd).toLocaleDateString()}
+                        All-Time Low: {formatPrice(coin.market_data.atl[currency], currency)} on{' '}
+                        {new Date(coin.market_data.atl_date[currency]).toLocaleDateString()}
                     </h4>
                     <h4>Last Updated: {new Date(coin.last_updated).toLocaleString()}</h4>
                 </div>
 
-                <CoinChart coinId={coin.id} />
+                <CoinChart coinId={coin.id} currency={currency} />
 
                 <div className='coin-details-links'>
                 {coin.links.homepage[0] && (

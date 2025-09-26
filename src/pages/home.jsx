@@ -3,6 +3,7 @@ import LimitSelector from "../components/LimitSelector";
 import FilterInput from "../components/FilterInput";
 import SortSelector from "../components/SortSelector";
 import Spinner from "../components/Spinner";
+import CurrencySelector from "../components/CurrencySelector";
 
 const HomePage = ({
     coins,
@@ -12,6 +13,8 @@ const HomePage = ({
     setLimit,
     sortBy,
     setSortBy,
+    currency,
+    setCurrency,
     loading,
     error
 }) => {
@@ -46,6 +49,7 @@ const HomePage = ({
 
             <div className="top-controls">
                 <FilterInput filter={filter} onFilterChange={setFilter} />
+                <CurrencySelector currency={currency} onCurrencyChange={setCurrency} />
                 <LimitSelector limit={limit} onLimitChange={setLimit} />
                 <SortSelector sortBy={sortBy} onSortChange={setSortBy} />
             </div>
@@ -53,7 +57,7 @@ const HomePage = ({
             { !loading && !error && (
                 <main className="grid">
                 {filteredCoins.length > 0 ? filteredCoins.map((coin) => (
-                    <CoinCard key={coin.id} coin={coin} />
+                    <CoinCard key={coin.id} coin={coin} currency={currency} />
                 )) : (<p>No matching coins</p>)}
                 </main>
             ) }

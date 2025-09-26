@@ -14,11 +14,19 @@ const App = () => {
   const [limit, setLimit] = useState(10);
   const [filter, setFilter] = useState('');
   const [sortBy, setSortBy] = useState('market_cap_desc');
+  const [currency, setCurrency] = useState(() => {
+    return localStorage.getItem('currency') || 'usd';
+  });
+
+  const handleCurrencyChange = (newCurrency) => {
+    setCurrency(newCurrency);
+    localStorage.setItem('currency', newCurrency);
+  };
 
   useEffect(() => {
     const fetchCoins = async () => {
       try {
-        const res = await fetch(`${API_URL}&order=market_cap_desc&per_page=${limit}&page=1&sparkline=false`);
+        const res = await fetch(`${API_URL}?vs_currency=${currency}&order=market_cap_desc&per_page=${limit}&page=1&sparkline=false`);
         if (!res.ok) throw new Error('Failed to fetch data');
         const data = await res.json();
         setCoins(data);
@@ -30,7 +38,7 @@ const App = () => {
     }
 
     fetchCoins();
-  }, [limit]);
+  }, [currency, limit]);
 
   return ( 
     <>
@@ -47,13 +55,15 @@ const App = () => {
               setLimit={setLimit}
               sortBy={sortBy}
               setSortBy={setSortBy}
+              currency={currency}
+              setCurrency={handleCurrencyChange}
               loading={loading}
               error={error}
             />
           } 
         />
         <Route path='/about' element={<AboutPage />} />
-        <Route path='/coin/:id' element={<CoinDetailsPage />} />
+        <Route path='/coin/:id' element={<CoinDetailsPage currency={currency} />} />
         <Route path='*' element={<NotFound />} />
       </Routes>
     </>
