@@ -13,13 +13,13 @@ export function formatPrice(amount, currencyCode, locale = 'en-US') {
             style: 'currency',
             currency: currencyCode.toUpperCase(),
             minimumFractionDigits: 0,
-            maximumFractionDigits: 2,
+            maximumFractionDigits: 6,
         }).format(amount);
     } catch (e) {
         const symbol = currencySymbols[currencyCode.toLowerCase()] || '';
         return `${symbol}${amount.toLocaleString(locale, {
             minimumFractionDigits: 0,
-            maximumFractionDigits: 2,
+            maximumFractionDigits: 6,
         })}`;
     }
 }
